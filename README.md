@@ -13,30 +13,14 @@ A package for the [Pi coding agent](https://pi.dev). It includes `copy-mode-ime`
 
 Use Pi's interactive fullscreen TUI on macOS. The companion was developed against Pi `1.5.2` and `@luan.sh/pi-copy-mode` `0.3.4`. Install [macism](https://github.com/laishulu/macism) or [im-select](https://github.com/daipeihust/im-select) on the `PATH` used by Pi. Enable the macOS ABC input source (`com.apple.keylayout.ABC`) or set `PI_COPY_MODE_IME_NAV_SOURCE` to another enabled English source ID.
 
-Install the copy-mode extension from npm and the companion package from GitHub.
+Install both extensions from npm.
 
 ```sh
 pi install npm:@luan.sh/pi-copy-mode@0.3.4
-pi install git:github.com/MimeLyc/pi_setup
+pi install npm:pi-copy-mode-ime
 ```
 
-To work from a local clone, use its path for the second install command. Pi loads that checkout in place.
-
-```sh
-pi install /path/to/pi_setup
-```
-
-`pi install` adds package entries to your Pi settings. Use `pi config` to enable or disable individual resources. To restrict this GitHub package to `copy-mode-ime`, replace just its entry in the `packages` array of `~/.pi/agent/settings.json` with the object below. Keep the separate copy-mode package entry.
-
-```json
-{
-  "source": "git:github.com/MimeLyc/pi_setup",
-  "extensions": ["extensions/copy-mode-ime/index.ts"],
-  "skills": [],
-  "prompts": [],
-  "themes": []
-}
-```
+You can also install the companion from GitHub with `pi install git:github.com/MimeLyc/pi_setup` or from a local clone with `pi install /path/to/pi_setup`. Use one installation source for the companion. If you switch sources, remove its old package entry and keep the separate `@luan.sh/pi-copy-mode` entry. Use `pi config` to enable or disable either extension.
 
 For a one-off session without registering this package, run the following from a local clone with `@luan.sh/pi-copy-mode@0.3.4` already installed.
 
@@ -64,7 +48,7 @@ npm run typecheck
 npm run check:hygiene
 ```
 
-`npm run check:hygiene` also runs without `npm install`. See the [extension development guide](./extensions/README.md) and [configuration template guide](./config/README.md).
+`npm run check:hygiene` also runs without `npm install`. See the [extension development guide](https://github.com/MimeLyc/pi_setup/blob/main/extensions/README.md) and [configuration template guide](https://github.com/MimeLyc/pi_setup/blob/main/config/README.md).
 
 ## License
 

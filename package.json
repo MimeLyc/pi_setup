@@ -1,28 +1,32 @@
 {
-  "name": "pi-setup",
+  "name": "pi-copy-mode-ime",
   "version": "0.1.0",
-  "description": "Portable configuration templates, extensions, skills, prompts, and themes for the Pi coding agent",
+  "description": "Switch macOS input sources for copy-mode navigation and comments in Pi",
   "license": "MIT",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MimeLyc/pi_setup.git"
+  },
   "keywords": [
     "pi-package",
     "pi-extension",
-    "pi-skills",
-    "coding-agent"
+    "copy-mode",
+    "ime",
+    "macos"
   ],
+  "files": [
+    "extensions/copy-mode-ime/*.ts",
+    "extensions/copy-mode-ime/README.md",
+    "config/copy-mode-ime.example.json"
+  ],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
   "pi": {
     "extensions": [
-      "./extensions/*.ts",
-      "./extensions/*/index.ts"
-    ],
-    "skills": [
-      "./skills"
-    ],
-    "prompts": [
-      "./prompts/*.md"
-    ],
-    "themes": [
-      "./themes/*.json"
+      "./extensions/copy-mode-ime/index.ts"
     ]
   },
   "scripts": {
