@@ -1,0 +1,35 @@
+{
+  "name": "pi-copy-mode-ime",
+  "version": "0.1.0",
+  "description": "Switch macOS input sources for copy-mode navigation and comments in Pi",
+  "license": "MIT",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MimeLyc/pi_setup.git",
+    "directory": "packages/copy-mode-ime"
+  },
+  "keywords": ["pi-package", "pi-extension", "copy-mode", "ime", "macos"],
+  "files": [
+    "config/copy-mode-ime.example.json",
+    "extensions/copy-mode-ime/README.md",
+    "extensions/copy-mode-ime/backend.ts",
+    "extensions/copy-mode-ime/config.ts",
+    "extensions/copy-mode-ime/controller.ts",
+    "extensions/copy-mode-ime/index.ts",
+    "extensions/copy-mode-ime/registry.ts"
+  ],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "pi": {
+    "extensions": ["./extensions/copy-mode-ime/index.ts"]
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": "*"
+  }
+}

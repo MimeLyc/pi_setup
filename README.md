@@ -1,6 +1,6 @@
 # pi_setup
 
-A package for the [Pi coding agent](https://pi.dev). It includes `copy-mode-ime`, a macOS extension that switches to an English input source for copy-mode shortcuts and restores your writing input source for comments and after you exit copy mode.
+A collection of extensions and configuration examples for the [Pi coding agent](https://pi.dev). Install the collection from GitHub or a local checkout. Extensions with their own npm package can be installed individually.
 
 ## Included resources
 
@@ -9,7 +9,15 @@ A package for the [Pi coding agent](https://pi.dev). It includes `copy-mode-ime`
 | [`copy-mode-ime`](./extensions/copy-mode-ime/README.md) | `extensions/copy-mode-ime/index.ts` | macOS input source companion for [`@luan.sh/pi-copy-mode`](https://www.npmjs.com/package/@luan.sh/pi-copy-mode) that switches to an English input source for copy-mode navigation and restores your writing input source for comments and exit. |
 | [Copy-mode hook example](./config/copy-mode-ime.example.json) | `config/copy-mode-ime.example.json` | Optional JSON hook configuration example for customizing `copy-mode-ime` transition policies. |
 
-## Install and quick start
+## Install the collection
+
+```sh
+pi install git:github.com/MimeLyc/pi_setup
+```
+
+To use a local checkout, run `pi install /path/to/pi_setup`. Pi loads the checkout in place. Use `pi config` to enable or disable individual extensions.
+
+## Install copy-mode-ime
 
 Use Pi's interactive fullscreen TUI on macOS. The companion was developed against Pi `1.5.2` and `@luan.sh/pi-copy-mode` `0.3.4`. Install [macism](https://github.com/laishulu/macism) or [im-select](https://github.com/daipeihust/im-select) on the `PATH` used by Pi. Enable the macOS ABC input source (`com.apple.keylayout.ABC`) or set `PI_COPY_MODE_IME_NAV_SOURCE` to another enabled English source ID.
 
@@ -20,7 +28,7 @@ pi install npm:@luan.sh/pi-copy-mode@0.3.4
 pi install npm:pi-copy-mode-ime
 ```
 
-You can also install the companion from GitHub with `pi install git:github.com/MimeLyc/pi_setup` or from a local clone with `pi install /path/to/pi_setup`. Use one installation source for the companion. If you switch sources, remove its old package entry and keep the separate `@luan.sh/pi-copy-mode` entry. Use `pi config` to enable or disable either extension.
+If you already installed the collection, install `@luan.sh/pi-copy-mode` separately and use the collection's copy of `copy-mode-ime`.
 
 For a one-off session without registering this package, run the following from a local clone with `@luan.sh/pi-copy-mode@0.3.4` already installed.
 
@@ -48,7 +56,18 @@ npm run typecheck
 npm run check:hygiene
 ```
 
-`npm run check:hygiene` also runs without `npm install`. See the [extension development guide](https://github.com/MimeLyc/pi_setup/blob/main/extensions/README.md) and [configuration template guide](https://github.com/MimeLyc/pi_setup/blob/main/config/README.md).
+`npm run check:hygiene` also runs without `npm install`. See the [extension development guide](./extensions/README.md) and [configuration template guide](./config/README.md).
+
+### Build the copy-mode-ime npm package
+
+Set the version in `packages/copy-mode-ime/package.template.json` for each new release. Preview the files and build the tarball from the repository root.
+
+```sh
+npm run pack:copy-mode-ime -- --dry-run
+npm run pack:copy-mode-ime
+```
+
+The tarball appears in `dist/`. To release it, run `npm publish` with the tarball path.
 
 ## License
 

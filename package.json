@@ -1,38 +1,36 @@
 {
-  "name": "pi-copy-mode-ime",
+  "name": "pi-setup",
+  "private": true,
   "version": "0.1.0",
-  "description": "Switch macOS input sources for copy-mode navigation and comments in Pi",
+  "description": "Portable configuration templates, extensions, skills, prompts, and themes for the Pi coding agent",
   "license": "MIT",
   "type": "module",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/MimeLyc/pi_setup.git"
-  },
   "keywords": [
     "pi-package",
     "pi-extension",
-    "copy-mode",
-    "ime",
-    "macos"
+    "pi-skills",
+    "coding-agent"
   ],
-  "files": [
-    "extensions/copy-mode-ime/*.ts",
-    "extensions/copy-mode-ime/README.md",
-    "config/copy-mode-ime.example.json"
-  ],
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org/",
-    "access": "public"
-  },
   "pi": {
     "extensions": [
-      "./extensions/copy-mode-ime/index.ts"
+      "./extensions/*.ts",
+      "./extensions/*/index.ts"
+    ],
+    "skills": [
+      "./skills"
+    ],
+    "prompts": [
+      "./prompts/*.md"
+    ],
+    "themes": [
+      "./themes/*.json"
     ]
   },
   "scripts": {
     "check": "npm run check:hygiene",
     "check:hygiene": "node ./scripts/check-hygiene.mjs",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "pack:copy-mode-ime": "node ./scripts/pack-copy-mode-ime.mjs"
   },
   "engines": {
     "node": ">=20.0.0"
