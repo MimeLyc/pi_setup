@@ -1,0 +1,9 @@
+{
+  "hooks": {
+    "copyModeEnter": "com.apple.keylayout.ABC",
+    "commentEnter": "restore-writing",
+    "commentExit": "com.apple.keylayout.ABC",
+    "copyModeExit": "restore-entry",
+    "sessionShutdown": "restore-entry"
+  }
+}

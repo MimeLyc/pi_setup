@@ -1,0 +1,51 @@
+# OS & Editor
+.DS_Store
+Thumbs.db
+*~
+*.swp
+*.swo
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# Node / Bun / TypeScript
+node_modules/
+dist/
+build/
+coverage/
+*.tsbuildinfo
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.npm/
+
+# Secrets & Credentials (strictly prohibited)
+.env
+.env.*
+!.env.example
+auth.json
+*secret*
+*credentials*
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Machine-specific & Pi runtime artifacts (never commit)
+.orca/
+*.local.json
+*.local.yaml
+*.local.yml
+*.local.toml
+*.local.md
+*.local.ts
+settings.local.json
+keybindings.local.json
+mcp.local.json
+sessions/
+backups/
+logs/
+tmp/
+.cmux*
+*.jsonl
