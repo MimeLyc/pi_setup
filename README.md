@@ -1,141 +1,70 @@
 # pi_setup
 
-Portable configuration templates, custom extensions, skills, prompt templates, and themes for the [Pi](https://pi.dev) coding agent.
+A package for the [Pi coding agent](https://pi.dev). It includes `copy-mode-ime`, a macOS extension that switches to an English input source for copy-mode shortcuts and restores your writing input source for comments and after you exit copy mode.
 
-This repository is structured as a standard **Pi Package** so its extensions, skills, prompts, and themes can be installed declaratively via `pi install`—with selective opt-in/opt-out filtering and zero destructive overwrites of your local `~/.pi/agent/` state.
+## Included resources
 
----
+| Resource | Path | Description |
+| --- | --- | --- |
+| [`copy-mode-ime`](./extensions/copy-mode-ime/README.md) | `extensions/copy-mode-ime/index.ts` | macOS input source companion for [`@luan.sh/pi-copy-mode`](https://www.npmjs.com/package/@luan.sh/pi-copy-mode) that switches to an English input source for copy-mode navigation and restores your writing input source for comments and exit. |
+| [Copy-mode hook example](./config/copy-mode-ime.example.json) | `config/copy-mode-ime.example.json` | Optional JSON hook configuration example for customizing `copy-mode-ime` transition policies. |
 
-## Core Principles
+## Install and quick start
 
-Because this is a public tool-setup repository, all contributions and configurations adhere to five strict rules:
+Use Pi's interactive fullscreen TUI on macOS. The companion was developed against Pi `1.5.2` and `@luan.sh/pi-copy-mode` `0.3.4`. Install [macism](https://github.com/laishulu/macism) or [im-select](https://github.com/daipeihust/im-select) on the `PATH` used by Pi. Enable the macOS ABC input source (`com.apple.keylayout.ABC`) or set `PI_COPY_MODE_IME_NAV_SOURCE` to another enabled English source ID.
 
-1. **Environment Portability (Zero Machine Coupling)**
-   - No hardcoded home directories (`/Users/<name>`, `/home/<name>`, `C:\\Users\\<name>`), hostnames, fixed Homebrew/system paths, or local proxy ports.
-   - OS-specific features and external CLIs are detected dynamically via `PATH` and `process.platform`, with environment variable overrides and graceful degradation when unavailable.
-2. **Zero Secrets, Zero PII, Zero Session State**
-   - No API keys, OAuth tokens, private endpoints, personal identifiers, `auth.json`, or `.jsonl` transcripts are ever committed.
-   - Credentials are referenced strictly by environment variable name (e.g., `"$OPENAI_API_KEY"`).
-3. **Non-Destructive, Selective Adoption**
-   - Resources load cleanly through Pi's package manager rather than overwriting `~/.pi/agent/settings.json` or `keybindings.json`. Users can enable or disable individual extensions or skills via `pi config` or `settings.json` filters.
-4. **Host Dependency Isolation & Minimal Supply Chain**
-   - Pi host packages (`@earendil-works/*`, `typebox`) live exclusively in `peerDependencies` so Pi maps them to its own runtime singletons. Runtime code prefers Node.js built-ins over external npm dependencies.
-5. **Clear Licensing & Upstream Attribution**
-   - Original work is licensed under MIT (`LICENSE`). Any adapted third-party resources retain their upstream license notices and source links.
+Install the copy-mode extension from npm and the companion package from GitHub.
 
----
-
-## Repository Structure
-
-```text
-pi_setup/
-├── package.json          # Pi package manifest (entry points, peerDependencies, check scripts)
-├── tsconfig.json         # Strict TypeScript configuration for extensions & scripts
-├── AGENTS.md             # Repository-wide rules and workflow guidelines for AI agents
-├── LICENSE               # MIT License
-├── extensions/           # Custom Pi TypeScript extensions
-│   ├── README.md         # Extension usage, environment dependencies, and best practices
-│   └── AGENTS.md         # Agent-specific engineering rules for extensions/
-├── skills/               # Reusable Agent Skills (skills/<name>/SKILL.md)
-├── prompts/              # Reusable Markdown prompt templates (prompts/*.md)
-├── themes/               # Custom Pi TUI color themes (themes/*.json)
-├── config/               # Sanitized, portable settings & keybinding reference templates
-│   └── README.md         # Guidelines for maintaining machine-independent config templates
-├── scripts/              # Developer & CI utilities
-│   └── check-hygiene.mjs # Automated scanner for secrets, forbidden files, and hardcoded paths
-└── docs/                 # Architecture notes, specs (docs/specs/), and knowledge base (docs/knowledge/)
+```sh
+pi install npm:@luan.sh/pi-copy-mode@0.3.4
+pi install git:github.com/MimeLyc/pi_setup
 ```
 
-| Directory | Purpose | Loaded Automatically by `pi install`? |
-| --- | --- | --- |
-| `extensions/` | Custom Pi lifecycle hooks, TUI enhancements, commands, and tools (`*.ts`, `*/index.ts`) | Yes (configurable via filters) |
-| `skills/` | Task-focused instruction bundles (`<skill>/SKILL.md`) | Yes (configurable via filters) |
-| `prompts/` | Slash-invocable Markdown prompt templates (`*.md`) | Yes (configurable via filters) |
-| `themes/` | JSON color themes for Pi's TUI (`*.json`) | Yes (selectable via `/theme`) |
-| `config/` | Sanitized `*.example.json` reference snippets for `settings.json` / `keybindings.json` | No (manual reference / merge) |
-| `scripts/` | Local and CI verification scripts (e.g., hygiene and portability checks) | No |
-| `docs/` | Design specifications and technical notes | No |
+To work from a local clone, use its path for the second install command. Pi loads that checkout in place.
 
----
-
-## Quick Start
-
-### Install as a Pi Package
-
-Install from a Git remote or directly from a local clone:
-
-```bash
-# From GitHub (once published)
-pi install git:github.com/<owner>/pi_setup
-
-# Or from a local checkout (loads in place and supports /reload)
+```sh
 pi install /path/to/pi_setup
 ```
 
-### Select Only What You Need
-
-Use `pi config` interactively, or narrow loaded resources in `~/.pi/agent/settings.json`:
+`pi install` adds package entries to your Pi settings. Use `pi config` to enable or disable individual resources. To restrict this GitHub package to `copy-mode-ime`, replace just its entry in the `packages` array of `~/.pi/agent/settings.json` with the object below. Keep the separate copy-mode package entry.
 
 ```json
 {
-  "packages": [
-    {
-      "source": "git:github.com/<owner>/pi_setup",
-      "extensions": ["extensions/*.ts", "extensions/*/index.ts"],
-      "skills": ["skills/*"],
-      "prompts": [],
-      "themes": []
-    }
-  ]
+  "source": "git:github.com/MimeLyc/pi_setup",
+  "extensions": ["extensions/copy-mode-ime/index.ts"],
+  "skills": [],
+  "prompts": [],
+  "themes": []
 }
 ```
 
-### Use Configuration Templates
+For a one-off session without registering this package, run the following from a local clone with `@luan.sh/pi-copy-mode@0.3.4` already installed.
 
-Browse `config/` for portable `settings.example.json` or `keybindings.example.json` snippets and merge only the keys you want into `~/.pi/agent/`. Keep machine-local overrides (such as local HTTP proxies or workstation paths) in your personal `~/.pi/agent/settings.json`, never in this repository.
-
----
-
-## Available Extensions
-
-| Extension | Purpose | Runtime dependencies |
-| --- | --- | --- |
-| [`copy-mode-ime`](./extensions/copy-mode-ime/README.md) | Remember the writing input source, use English for copy-mode navigation, and restore writing input for comments and exit. | macOS, Pi fullscreen TUI, `@luan.sh/pi-copy-mode` 0.3.4, and `macism` or `im-select` on `PATH`. |
-
-The copy-mode companion defaults to `com.apple.keylayout.ABC` for navigation. Its module README documents `PI_COPY_MODE_IME_*` configuration, installation, resource filtering, `/reload`, warning behavior, and the upstream internal IDs it observes. Other platforms and non-TUI modes stay inert.
-
----
-
-## Development & Verification
-
-### Prerequisites
-
-- **Pi Coding Agent**: `>= 1.0.0`
-- **Node.js**: `>= 20.0.0`
-
-### Commands
-
-```bash
-# Run public-repo hygiene checks (no npm install required)
-npm run check:hygiene
-
-# Install devDependencies for TypeScript definitions and run typechecking
-npm install
-npm run typecheck
+```sh
+pi -e ./extensions/copy-mode-ime/index.ts
 ```
 
-For detailed extension architecture, runtime/OS dependency conventions, and lifecycle rules, read [`extensions/README.md`](./extensions/README.md).
+Start Pi in fullscreen TUI mode, or use `/reload` if Pi is already running. With the default settings, entering copy mode selects the navigation source. Opening a comment restores the writing source, and closing the comment returns to the navigation source if copy mode is still active. Leaving copy mode restores the most recently remembered writing source.
 
----
+To disable switching for a session, start Pi with `PI_COPY_MODE_IME_ENABLED=0`.
 
-## Pre-Commit Checklist
+## Configuration and troubleshooting
 
-- [ ] No hardcoded user paths (`/Users/<name>`, `/home/<name>`, `C:\\Users\\<name>`) or local proxy URLs.
-- [ ] No secrets, tokens, private URLs, or `.jsonl` session transcripts.
-- [ ] Optional OS/CLI dependencies are resolved via `PATH` / env vars, documented, and degrade gracefully.
-- [ ] `npm run check:hygiene` and `npm run typecheck` pass cleanly.
+To customize when sources switch, copy the [example configuration](./config/copy-mode-ime.example.json) to a local file, edit the hooks, and set `PI_COPY_MODE_IME_CONFIG_FILE` in the shell that starts Pi. Restart Pi after changing environment variables. See the [configuration reference](./extensions/copy-mode-ime/README.md#configuration) for available policies and settings.
 
----
+If switching fails, check the enabled input sources and the CLI from the same terminal that launches Pi. See [troubleshooting and manual verification](./extensions/copy-mode-ime/README.md#troubleshooting-and-manual-verification).
+
+## Contributing
+
+From a local clone, use a Node.js version supported by Pi and run the development checks.
+
+```sh
+npm install
+npm run typecheck
+npm run check:hygiene
+```
+
+`npm run check:hygiene` also runs without `npm install`. See the [extension development guide](./extensions/README.md) and [configuration template guide](./config/README.md).
 
 ## License
 
