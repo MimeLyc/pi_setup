@@ -1,5 +1,6 @@
 {
   "name": "pi-setup",
+  "private": true,
   "version": "0.1.0",
   "description": "Portable configuration templates, extensions, skills, prompts, and themes for the Pi coding agent",
   "license": "MIT",
@@ -28,7 +29,8 @@
   "scripts": {
     "check": "npm run check:hygiene",
     "check:hygiene": "node ./scripts/check-hygiene.mjs",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "pack:copy-mode-ime": "node ./scripts/pack-copy-mode-ime.mjs"
   },
   "engines": {
     "node": ">=20.0.0"

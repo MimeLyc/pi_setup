@@ -13,17 +13,14 @@ There are no additional runtime npm dependencies. Linux and Windows remain inert
 
 ## Install and load
 
-From this repository's checkout:
+Install the upstream copy-mode extension and its input source companion separately.
 
 ```sh
-# Review and install the upstream companion separately.
 pi install npm:@luan.sh/pi-copy-mode@0.3.4
-
-# Register this local package without copying over existing configuration.
-pi install /path/to/pi_setup
+pi install npm:pi-copy-mode-ime
 ```
 
-Use `pi config` to enable `extensions/copy-mode-ime/index.ts`. For a one-off session from the repository root, with copy-mode already installed:
+To install the companion from a local checkout, use `pi install /path/to/pi_setup` in place of the second command. Use `pi config` to enable `extensions/copy-mode-ime/index.ts`. For a one-off session from the repository root, with copy-mode already installed:
 
 ```sh
 pi -e ./extensions/copy-mode-ime/index.ts
