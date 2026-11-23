@@ -19,7 +19,7 @@ To use a local checkout, run `pi install /path/to/pi_setup`. Pi loads the checko
 
 ## Install copy-mode-ime
 
-Use Pi's interactive fullscreen TUI on macOS. The companion was developed against Pi `1.5.2` and `@luan.sh/pi-copy-mode` `0.3.4`. Install [macism](https://github.com/laishulu/macism) or [im-select](https://github.com/daipeihust/im-select) on the `PATH` used by Pi. Enable the macOS ABC input source (`com.apple.keylayout.ABC`) or set `PI_COPY_MODE_IME_NAV_SOURCE` to another enabled English source ID.
+Use Pi's interactive fullscreen TUI on macOS. The companion was developed against Pi `1.5.2` and `@luan.sh/pi-copy-mode` `0.3.4`. Install [macism](https://github.com/laishulu/macism) (`4.0.0+` recommended for third-party CJKV input methods such as Squirrel/Rime) or [im-select](https://github.com/daipeihust/im-select) on the `PATH` used by Pi. Enable the macOS ABC input source (`com.apple.keylayout.ABC`) or set `PI_COPY_MODE_IME_NAV_SOURCE` to another enabled English source ID.
 
 Install both extensions from npm.
 
@@ -44,7 +44,7 @@ To disable switching for a session, start Pi with `PI_COPY_MODE_IME_ENABLED=0`.
 
 To customize when sources switch, copy the [example configuration](./config/copy-mode-ime.example.json) to a local file, edit the hooks, and set `PI_COPY_MODE_IME_CONFIG_FILE` in the shell that starts Pi. Restart Pi after changing environment variables. See the [configuration reference](./extensions/copy-mode-ime/README.md#configuration) for available policies and settings.
 
-If switching fails, check the enabled input sources and the CLI from the same terminal that launches Pi. See [troubleshooting and manual verification](./extensions/copy-mode-ime/README.md#troubleshooting-and-manual-verification).
+If switching fails—or if a third-party CJKV input method such as Squirrel/Rime stays in English even when shown as active in the menu bar—check the enabled input sources and CLI version (`macism --version`, `4.0.0+` recommended) from the same terminal that launches Pi. See [troubleshooting and manual verification](./extensions/copy-mode-ime/README.md#troubleshooting-and-manual-verification) and the [FAQ](./extensions/copy-mode-ime/README.md#faq).
 
 ## Contributing
 

@@ -4,7 +4,7 @@ A macOS companion for `@luan.sh/pi-copy-mode`. It switches to an English input s
 
 ## Install
 
-Use the fullscreen TUI on macOS and install [macism](https://github.com/laishulu/macism) or [im-select](https://github.com/daipeihust/im-select) on Pi's `PATH`. The default navigation source is macOS ABC. Set `PI_COPY_MODE_IME_NAV_SOURCE` if you use a different English input source.
+Use the fullscreen TUI on macOS and install [macism](https://github.com/laishulu/macism) (`4.0.0+` recommended for third-party CJKV input methods such as Squirrel/Rime) or [im-select](https://github.com/daipeihust/im-select) on Pi's `PATH`. The default navigation source is macOS ABC. Set `PI_COPY_MODE_IME_NAV_SOURCE` if you use a different English input source.
 
 ```sh
 pi install npm:@luan.sh/pi-copy-mode@0.3.4
