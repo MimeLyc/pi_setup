@@ -6,7 +6,7 @@ A macOS input source companion for [`@luan.sh/pi-copy-mode`](https://www.npmjs.c
 
 - Pi's interactive fullscreen TUI. Developed against Pi **1.5.2** and Node.js **20+**.
 - `@luan.sh/pi-copy-mode` **0.3.4**, loaded as a separate Pi extension.
-- macOS with [`macism`](https://github.com/laishulu/macism) or [`im-select`](https://github.com/daipeihust/im-select) on the Pi process's `PATH`. Automatic discovery tries `macism` first and falls back to `im-select` only when `macism` is absent. An installed but failing CLI disables automatic switching for that session.
+- macOS with [`macism`](https://github.com/laishulu/macism) (**4.0.0+** recommended for third-party CJKV input methods such as Squirrel/Rime) or [`im-select`](https://github.com/daipeihust/im-select) on the Pi process's `PATH`. Automatic discovery tries `macism` first and falls back to `im-select` only when `macism` is absent. An installed but failing CLI disables automatic switching for that session.
 - An enabled English/ASCII input source. The default is `com.apple.keylayout.ABC`; change `PI_COPY_MODE_IME_NAV_SOURCE` if your enabled source has another ID.
 
 There are no additional runtime npm dependencies. Linux and Windows remain inert with one warning in TUI mode. Print, JSON, and RPC sessions perform no instrumentation, CLI calls, or notifications.
@@ -139,3 +139,31 @@ At most one actionable warning is emitted per owning TUI runtime (reset by `/rel
 For manual macOS validation, start with a non-English writing source, enter copy mode, and check English navigation. Open a comment with `c`, choose a different writing source, save, and leave copy mode; confirm that the new source is restored. Repeat with mouse comments, existing annotation pills, cancel/delete, copy/cancel exit, and `/reload` or quit while copy mode is active. Also open and close a comment outside copy mode and confirm its source stays selected. With `restore-entry` configured, begin from both English and non-English sources, change the comment language, and confirm exit restores the original entry instead of the updated writing preference. Repeat shutdown during navigation and a comment, and confirm idle shutdown leaves a manually selected source alone.
 
 Development verification uses a temporary fake CLI and the upstream registry; it does not prove actual macOS switching or terminal/IME GUI behavior. No unit test files are included.
+
+## FAQ
+
+### Why does Squirrel (Rime) or another third-party CJKV input method show as active in the menu bar, yet only type English in both comments and the chat input?
+
+This is a macOS `TISSelectInputSource` race condition triggered by older `macism` versions (such as `2.0.0`) and `im-select`, especially on macOS 26+ (Tahoe and newer):
+
+- Calling `TISSelectInputSource` from a background CLI process commits the CJKV input source system-wide before macOS Text Services Manager (TSM) updates the focused app. Third-party CJKV input methods can be activated and dropped immediately in the focused terminal window, leaving the menu bar showing the CJKV input method while keystrokes fall back to Latin/English.
+- Because `TISCopyCurrentKeyboardInputSource()` still reports the requested source ID, `copy-mode-ime`'s readback check succeeds without a warning.
+- Older `macism` versions (for example `2.0.0`, whose borderless `NSWindow` fails `canBecomeKeyWindow` and exits without running an event loop) and `im-select` also skip switching when the reported system source ID already matches, so repeated comment/exit transitions stay stuck in English across both the comment overlay and the main input box.
+
+**How to fix it:**
+
+1. Upgrade `macism` to **4.0.0 or newer**, which switches CJKV sources directly in the focused app via TSM (even when the system-reported source ID already matches) and falls back to a key-capable temporary window.
+2. Verify the active binary on Pi's `PATH`:
+
+   ```sh
+   macism --version
+   ```
+
+   `4.0.0` prints `v4.0.0`. Older releases such as `2.0.0` do not support `--version` and print `Input source --version does not exist!`.
+3. Note that the Homebrew tap can lag behind upstream releases. If Homebrew does not provide `4.0.0+`, install the release binary from [`laishulu/macism` releases](https://github.com/laishulu/macism/releases) (or build from source) onto your `PATH`, or point `PI_COPY_MODE_IME_BIN` to the upgraded executable and restart Pi.
+
+**Quick recovery before upgrading:** switch focus to another macOS app and back (`Cmd+Tab`), or re-select the input method manually from the macOS menu bar.
+
+### Why did automatic switching stop working mid-session?
+
+Any single CLI query failure, timeout, or selection readback mismatch disables automatic switching for the rest of that TUI runtime until `/reload`, and at most one warning toast is shown per runtime. This can happen if a cold CLI launch exceeds `PI_COPY_MODE_IME_TIMEOUT_MS`, if you manually switch input sources mid-transition, or if multiple Pi sessions switch the desktop input source at the same time. Run `/reload` to re-enable switching, and raise `PI_COPY_MODE_IME_TIMEOUT_MS` (up to `10000`) if slow CLI startups recur.
